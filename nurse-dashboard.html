@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>(() => { const t = localStorage.getItem('sanad_theme') || 'light'; if(t === 'dark'){ document.documentElement.classList.add('dark'); document.documentElement.setAttribute('data-theme', 'dark'); } })();</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f4">
+  <title>Nurse Dashboard | Sanad Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="nurse-dashboard.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="translations.js"></script>
+  <script src="language.js"></script>
+  <script src="appointment-state.js"></script>
+  <script src="nurse-dashboard.js" defer></script>
+</head>
+<body class="admin-body nurse-body">
+  <header class="admin-topbar">
+    <a class="admin-brand" href="index.html" aria-label="Sanad Hospital home">
+      <span class="admin-brand-mark" aria-hidden="true">S<span>+</span></span>
+      <span>Sanad Hospital<small>NURSING WORKSPACE</small></span>
+    </a>
+    <div class="admin-top-actions">
+      <span class="admin-user" id="nurseGreeting">Nurse</span>
+      <button class="control-button" id="languageToggle" type="button" aria-label="Change language">العربية</button>
+      <button class="control-button icon-control" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></button>
+      <a class="control-button nurse-home back-to-site" href="index.html">Back to Site</a>
+      <button class="control-button logout-control" id="logoutButton" type="button">Log Out</button>
+    </div>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="sidebar-brand" href="index.html" aria-label="Sanad Hospital home">
+        <span class="admin-brand-mark" aria-hidden="true">S<span>+</span></span>
+        <span>Sanad Hospital<small>NURSING WORKSPACE</small></span>
+      </a>
+      <div class="sidebar-label">NURSING WORKSPACE</div>
+      <nav id="nurseNav" aria-label="Nurse sections">
+        <a href="#today-appointments" class="active" data-section="today-appointments">Today's Appointments</a>
+        <a href="#schedule" data-section="schedule">Schedule Doctor Appointments</a>
+        <a href="#tasks" data-section="tasks">Doctor Task Assistance</a>
+      </nav>
+      <div class="sidebar-foot"><span class="live-indicator"></span><span>NURSING WORKSPACE</span></div>
+    </aside>
+    <main class="admin-main nurse-main">
+      <section class="admin-section page-intro">
+        <div><span class="section-kicker">SANAD / NURSING WORKSPACE</span><h1>Nurse Dashboard</h1><p>Coordinate appointment schedules and support doctor-assigned care tasks.</p></div>
+        <div class="today-chip"><span class="live-indicator"></span><time id="todayLabel"></time></div>
+      </section>
+
+      <section class="admin-section management-section nurse-section active-section" id="today-appointments" data-panel="today-appointments">
+        <div class="section-heading"><div><span class="section-kicker">APPOINTMENT COORDINATION</span><h2>Today's Appointments</h2><p>Update appointment statuses for the care team.</p></div></div>
+        <div class="table-scroll nurse-table-scroll">
+          <table>
+            <thead><tr><th>Patient</th><th>Patient ID</th><th>Time</th><th>Status</th></tr></thead>
+            <tbody id="todayAppointmentRows">
+              <tr data-patient-id="P-10482"><td class="patient-name">Mariam Hassan</td><td>P-10482</td><td>08:30</td><td><select class="nurse-status-select" aria-label="Appointment status for Mariam Hassan"><option value="completed">Completed</option><option value="postponed">Postponed</option><option value="cancelled">Cancelled</option></select></td></tr>
+              <tr data-patient-id="P-10483"><td class="patient-name">Omar Nabil</td><td>P-10483</td><td>09:15</td><td><select class="nurse-status-select" aria-label="Appointment status for Omar Nabil"><option value="completed">Completed</option><option value="postponed">Postponed</option><option value="cancelled">Cancelled</option></select></td></tr>
+              <tr data-patient-id="P-10484"><td class="patient-name">Salma Mahmoud</td><td>P-10484</td><td>10:00</td><td><select class="nurse-status-select" aria-label="Appointment status for Salma Mahmoud"><option value="completed">Completed</option><option value="postponed">Postponed</option><option value="cancelled">Cancelled</option></select></td></tr>
+              <tr data-patient-id="P-10485"><td class="patient-name">Youssef Amin</td><td>P-10485</td><td>11:30</td><td><select class="nurse-status-select" aria-label="Appointment status for Youssef Amin"><option value="completed">Completed</option><option value="postponed">Postponed</option><option value="cancelled">Cancelled</option></select></td></tr>
+              <tr data-patient-id="P-10486"><td class="patient-name">Nour Adel</td><td>P-10486</td><td>13:00</td><td><select class="nurse-status-select" aria-label="Appointment status for Nour Adel"><option value="completed">Completed</option><option value="postponed">Postponed</option><option value="cancelled">Cancelled</option></select></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section management-section nurse-section" id="schedule" data-panel="schedule">
+        <div class="section-heading"><div><span class="section-kicker">APPOINTMENT COORDINATION</span><h2>Schedule Doctor Appointments</h2><p>Review pending requests, approve them, or schedule an appointment for a patient.</p></div></div>
+        <label class="schedule-filter" for="doctorFilter">Filter by doctor
+          <select id="doctorFilter">
+            <option value="all">All doctors</option>
+            <option value="Dr. Anya Sharma">Dr. Anya Sharma</option>
+            <option value="Dr. Omar Farouk">Dr. Omar Farouk</option>
+            <option value="Dr. Layla Hassan">Dr. Layla Hassan</option>
+            <option value="Dr. Karim Nassar">Dr. Karim Nassar</option>
+          </select>
+        </label>
+        <div class="table-scroll nurse-table-scroll">
+          <table>
+            <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="appointmentRows">
+              <tr data-doctor="Dr. Anya Sharma">
+                <td class="patient-name">Mariam Hassan</td><td>Dr. Anya Sharma</td><td>22 Oct 2026</td><td>09:00</td>
+                <td><span class="status-pill pending">Pending</span></td>
+                <td><div class="row-actions"><button class="row-action" type="button" data-appointment-action="approve">Approve</button><button class="row-action" type="button" data-appointment-action="reschedule">Reschedule</button></div></td>
+              </tr>
+              <tr data-doctor="Dr. Omar Farouk">
+                <td class="patient-name">Omar Nabil</td><td>Dr. Omar Farouk</td><td>22 Oct 2026</td><td>10:30</td>
+                <td><span class="status-pill pending">Pending</span></td>
+                <td><div class="row-actions"><button class="row-action" type="button" data-appointment-action="approve">Approve</button><button class="row-action" type="button" data-appointment-action="reschedule">Reschedule</button></div></td>
+              </tr>
+              <tr data-doctor="Dr. Layla Hassan">
+                <td class="patient-name">Salma Mahmoud</td><td>Dr. Layla Hassan</td><td>23 Oct 2026</td><td>12:00</td>
+                <td><span class="status-pill pending">Pending</span></td>
+                <td><div class="row-actions"><button class="row-action" type="button" data-appointment-action="approve">Approve</button><button class="row-action" type="button" data-appointment-action="reschedule">Reschedule</button></div></td>
+              </tr>
+              <tr data-doctor="Dr. Karim Nassar">
+                <td class="patient-name">Youssef Amin</td><td>Dr. Karim Nassar</td><td>24 Oct 2026</td><td>14:00</td>
+                <td><span class="status-pill pending">Pending</span></td>
+                <td><div class="row-actions"><button class="row-action" type="button" data-appointment-action="approve">Approve</button><button class="row-action" type="button" data-appointment-action="reschedule">Reschedule</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="section-heading schedule-form-heading"><div><span class="section-kicker">NEW APPOINTMENT</span><h2>Schedule an Appointment</h2></div></div>
+        <form class="editor-form nurse-form" id="scheduleForm">
+          <label>Patient name<input name="patient" type="text" required maxlength="100" placeholder="Enter patient name"></label>
+          <label>Doctor<select name="doctor" required><option value="">Select a doctor</option><option>Dr. Anya Sharma</option><option>Dr. Omar Farouk</option><option>Dr. Layla Hassan</option><option>Dr. Karim Nassar</option></select></label>
+          <label>Date<input name="date" type="date" required></label>
+          <label>Time<input name="time" type="time" required></label>
+          <div class="form-actions"><button class="primary-button" type="submit">Schedule Appointment</button></div>
+        </form>
+      </section>
+
+      <section class="admin-section management-section nurse-section" id="tasks" data-panel="tasks">
+        <div class="section-heading"><div><span class="section-kicker">CARE TEAM SUPPORT</span><h2>Doctor Task Assistance</h2><p>Update task progress and keep patient pre-checkup information current.</p></div></div>
+        <div class="task-grid" id="taskList">
+          <article class="task-card" data-patient="Mariam Hassan">
+            <div class="task-card-heading"><div><span class="section-kicker">Dr. Anya Sharma</span><h3>Record Pre-Checkup Vitals</h3></div><span class="status-pill task-status pending">Pending</span></div>
+            <p class="task-patient">Patient: <strong>Mariam Hassan</strong></p>
+            <p class="vitals-summary">Blood Pressure: <span data-vital="bloodPressure">Not recorded</span> · Temperature: <span data-vital="temperature">Not recorded</span> · Heart Rate: <span data-vital="heartRate">Not recorded</span> · Weight: <span data-vital="weight">Not recorded</span></p>
+            <div class="task-actions"><button class="row-action" type="button" data-edit-vitals>Edit Vitals</button><button class="primary-button" type="button" data-cycle-task>Start Task</button></div>
+          </article>
+          <article class="task-card" data-patient="Omar Nabil">
+            <div class="task-card-heading"><div><span class="section-kicker">Dr. Salma Fathy</span><h3>Prepare Lab Sample</h3></div><span class="status-pill task-status pending">Pending</span></div>
+            <p class="task-patient">Patient: <strong>Omar Nabil</strong></p>
+            <p class="vitals-summary">Blood Pressure: <span data-vital="bloodPressure">120/80 mmHg</span> · Temperature: <span data-vital="temperature">36.8 °C</span> · Heart Rate: <span data-vital="heartRate">72 bpm</span> · Weight: <span data-vital="weight">68 kg</span></p>
+            <div class="task-actions"><button class="row-action" type="button" data-edit-vitals>Edit Vitals</button><button class="primary-button" type="button" data-cycle-task>Start Task</button></div>
+          </article>
+          <article class="task-card" data-patient="Salma Mahmoud">
+            <div class="task-card-heading"><div><span class="section-kicker">Dr. Lina Hassan</span><h3>Administer Medication</h3></div><span class="status-pill task-status in-progress">In Progress</span></div>
+            <p class="task-patient">Patient: <strong>Salma Mahmoud</strong></p>
+            <p class="vitals-summary">Blood Pressure: <span data-vital="bloodPressure">118/76 mmHg</span> · Temperature: <span data-vital="temperature">36.7 °C</span> · Heart Rate: <span data-vital="heartRate">70 bpm</span> · Weight: <span data-vital="weight">61 kg</span></p>
+            <div class="task-actions"><button class="row-action" type="button" data-edit-vitals>Edit Vitals</button><button class="primary-button" type="button" data-cycle-task>Complete Task</button></div>
+          </article>
+          <article class="task-card" data-patient="Youssef Amin">
+            <div class="task-card-heading"><div><span class="section-kicker">Dr. Omar Farouk</span><h3>Update Patient Chart</h3></div><span class="status-pill task-status pending">Pending</span></div>
+            <p class="task-patient">Patient: <strong>Youssef Amin</strong></p>
+            <p class="vitals-summary">Blood Pressure: <span data-vital="bloodPressure">Not recorded</span> · Temperature: <span data-vital="temperature">Not recorded</span> · Heart Rate: <span data-vital="heartRate">Not recorded</span> · Weight: <span data-vital="weight">Not recorded</span></p>
+            <div class="task-actions"><button class="row-action" type="button" data-edit-vitals>Edit Vitals</button><button class="primary-button" type="button" data-cycle-task>Start Task</button></div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="vitals-modal" id="vitalsModal" role="dialog" aria-modal="true" aria-labelledby="vitalsTitle" aria-hidden="true">
+    <form class="vitals-card" id="vitalsForm">
+      <div class="panel-heading"><div><span class="section-kicker">PATIENT PRE-CHECKUP</span><h2 id="vitalsTitle">Update Patient Vitals</h2></div><button class="vitals-close" id="closeVitals" type="button" aria-label="Close">×</button></div>
+      <p class="vitals-patient">Patient: <strong id="vitalsPatientName"></strong></p>
+      <label>Blood Pressure<input name="bloodPressure" type="text" maxlength="20" placeholder="e.g. 120/80 mmHg"></label>
+      <label>Temperature<input name="temperature" type="text" maxlength="20" placeholder="e.g. 36.8 °C"></label>
+      <label>Heart Rate<input name="heartRate" type="text" maxlength="20" placeholder="e.g. 72 bpm"></label>
+      <label>Weight<input name="weight" type="text" maxlength="20" placeholder="e.g. 68 kg"></label>
+      <div class="form-actions"><button class="primary-button" type="submit">Save Vitals</button></div>
+    </form>
+  </div>
+  <script src="site-ui.js"></script>
+</body>
+</html>

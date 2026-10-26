@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>(() => { const t = localStorage.getItem('sanad_theme') || 'light'; if(t === 'dark'){ document.documentElement.classList.add('dark'); document.documentElement.setAttribute('data-theme', 'dark'); } })();</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f4">
+  <title>Sanad Hospital | Care, connected</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="translations.js"></script>
+  <script src="language.js"></script>
+  <script src="mock-data.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="status"><span class="dot"></span> <span id="topMessage">A healthier tomorrow starts here</span></div>
+      <div class="meta"><span id="openingHours">Open 24 hours</span><a href="tel:16555">16555</a></div>
+    </div>
+    <div id="bookingConfirmation" class="modal" aria-modal="true" role="dialog" aria-labelledby="bookingConfirmationTitle" aria-hidden="true">
+      <div class="confirmation-card">
+        <span class="confirmation-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span>
+        <h2 id="bookingConfirmationTitle">Appointment Request Prepared Successfully</h2>
+        <button type="button" class="btn primary" id="closeBookingConfirmation">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap nav">
+      <a href="#home" class="brand" aria-label="Sanad Hospital home">
+        <span class="brand-mark">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8 7.7C21.8 5.7 18 5.2 14.6 6.1C12 7.6 11 10.3 12.5 12.3C13.7 14 16.6 14.4 19.1 15C22.2 15.7 23.7 17.3 23.1 19.4C22.3 22.3 17.9 23.8 14.1 22.5C12.1 21.8 10.7 20.1 9.9 18.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 8.5V15.5M12.5 12H19.5" stroke="#CFEFE7" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-copy"><span id="brandTitle">Sanad Hospital</span><small id="brandSub">CARE, CONNECTED</small></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#doctors" data-i18n="navDoctors">Top Doctors</a>
+        <a href="#services" data-i18n="navServices">Services & Tests</a>
+        <a href="#departments" data-i18n="navDepartments">Departments</a>
+        <a href="#about" data-i18n="navAbout">About Us</a>
+        <a href="#contact" data-i18n="navContact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="lang-switch">
+          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="ar">عربي</button>
+        </div>
+        <button id="themeToggle" class="icon-button" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>
+        </button>
+        <div class="auth" id="authActions">
+          <a href="login.html" class="btn secondary" id="loginBtn">Log In</a>
+          <a href="signup.html" class="btn primary" id="signupBtn">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-shell">
+          <div class="hero-copy">
+            <span class="hero-badge" id="heroBadge">Your health, in good hands</span>
+            <h1 id="heroTitle">Care that moves life forward.</h1>
+            <p id="heroText">A more connected hospital experience. Find your specialist, explore services, and manage your care in one place.</p>
+            <div class="cta-row">
+              <a href="#services" class="btn light" id="exploreBtn">Explore services</a>
+              <button type="button" class="btn primary" id="bookBtn">Book an appointment</button>
+            </div>
+            <div class="welcome-note" id="welcomeNote">Welcome to Sanad</div>
+          </div>
+          <div class="search-shell">
+            <select id="searchType" aria-label="Search category">
+              <option value="all">All services</option>
+              <option value="doctor">Doctors</option>
+              <option value="tests">Tests</option>
+              <option value="scans">Imaging</option>
+              <option value="surgery">Surgery</option>
+            </select>
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
+              <input id="searchInput" type="text" placeholder="Search doctors, tests, scans or procedures..." autocomplete="off">
+              <div id="suggestions" class="suggestions" aria-live="polite"></div>
+            </div>
+            <button type="button" class="btn primary" id="searchBtn">Search</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doctors" id="doctors">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Meet your care team</span>
+            <h2 id="doctorsTitle">Doctors you can count on.</h2>
+          </div>
+          <p id="doctorsDesc">Experienced specialists, thoughtful care, and a clear next step. Find the right person for you.</p>
+        </div>
+        <div class="catalog-toolbar">
+          <div id="filters" class="filters"></div>
+          <label class="catalog-sort" for="doctorSort">Sort doctors
+            <select id="doctorSort" aria-label="Sort doctors">
+              <option value="name">Sort by Name (A-Z)</option>
+              <option value="department">Sort by Department Name (A-Z)</option>
+              <option value="rate">Sort by Rating (Highest to Lowest)</option>
+              <option value="price">Sort by Price (Lowest to Highest)</option>
+            </select>
+          </label>
+        </div>
+        <div id="doctorGrid" class="doctor-grid"></div>
+      </div>
+    </section>
+
+    <section class="services" id="services">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Care, made accessible</span>
+            <h2 id="servicesTitle">Services for every step.</h2>
+          </div>
+          <p id="servicesDesc">From routine lab work to advanced imaging, explore what you need and know what to expect.</p>
+        </div>
+        <label class="catalog-sort" for="serviceSort">Sort services
+          <select id="serviceSort" aria-label="Sort services">
+            <option value="name">Sort by Name (A-Z)</option>
+            <option value="rate">Sort by Rating (Highest to Lowest)</option>
+            <option value="price">Sort by Price (Lowest to Highest)</option>
+          </select>
+        </label>
+        <div id="serviceTabs" class="tabs"></div>
+        <div id="serviceGrid" class="service-grid"></div>
+      </div>
+    </section>
+
+    <section id="departments">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Expertise, all under one roof</span>
+            <h2 id="deptTitle">Find your department.</h2>
+          </div>
+          <p id="deptDesc">Dedicated teams and modern facilities, working together around your health.</p>
+        </div>
+        <div id="deptGrid" class="dept-grid">
+          <article class="dept-card" data-icon="heart" data-name="Cardiology" data-ar-name="أمراض القلب" data-hours="Mon–Sat · 8am–8pm" data-ar-hours="السبت–الخميس · ٨ص–٨م"><div class="dept-icon"></div><h3>Cardiology</h3><p>Mon–Sat · 8am–8pm</p></article>
+          <article class="dept-card" data-icon="child" data-name="Pediatrics" data-ar-name="طب الأطفال" data-hours="Daily · 9am–9pm" data-ar-hours="يومياً · ٩ص–٩م"><div class="dept-icon"></div><h3>Pediatrics</h3><p>Daily · 9am–9pm</p></article>
+          <article class="dept-card" data-icon="bone" data-name="Orthopedics" data-ar-name="جراحة العظام" data-hours="Mon–Sat · 8am–6pm" data-ar-hours="السبت–الخميس · ٨ص–٦م"><div class="dept-icon"></div><h3>Orthopedics</h3><p>Mon–Sat · 8am–6pm</p></article>
+          <article class="dept-card" data-icon="brain" data-name="Neurology" data-ar-name="طب الأعصاب" data-hours="Sun–Thu · 9am–5pm" data-ar-hours="الأحد–الخميس · ٩ص–٥م"><div class="dept-icon"></div><h3>Neurology</h3><p>Sun–Thu · 9am–5pm</p></article>
+          <article class="dept-card" data-icon="plus" data-name="Emergency 24/7" data-ar-name="طوارئ ٢٤/٧" data-hours="Always open" data-ar-hours="مفتوح دائماً"><div class="dept-icon"></div><h3>Emergency 24/7</h3><p>Always open</p></article>
+          <article class="dept-card" data-icon="scan" data-name="Radiology" data-ar-name="الأشعة" data-hours="Daily · 7am–11pm" data-ar-hours="يومياً · ٧ص–١١م"><div class="dept-icon"></div><h3>Radiology</h3><p>Daily · 7am–11pm</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="wrap">
+        <div class="about-panel">
+          <div class="about-photo"></div>
+          <div class="about-copy">
+            <span class="eyebrow">The Sanad difference</span>
+            <h2>Better care is a team effort.</h2>
+            <p>At Sanad, clinical expertise meets thoughtful technology. Our accredited teams bring together trusted specialists, modern diagnostics, and patient-first care that follows you from first visit to recovery.</p>
+            <div class="stats">
+              <div class="stat"><strong>150+</strong><span>Specialists</span></div>
+              <div class="stat"><strong>50k+</strong><span>Patients served</span></div>
+              <div class="stat"><strong>25+</strong><span>Clinical units</span></div>
+              <div class="stat"><strong>24/7</strong><span>Emergency care</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Visit us</span>
+            <h2>Find our hospital.</h2>
+          </div>
+          <p>Conveniently located in Cairo, with emergency support, specialists, and diagnostic services available around the clock.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="map-card">
+            <div class="map-caption">
+              <h3>Sanad Hospital</h3>
+              <p>Cairo, Egypt</p>
+              <a class="btn light" href="https://maps.google.com/?q=Sanad+Hospital+Cairo" target="_blank" rel="noopener">View location</a>
+            </div>
+          </div>
+          <div class="hotline-card">
+            <div class="hotline-row">
+              <span class="phone-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 11.2 18a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 3.2 2 2 0 0 1 4.1 1h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg>
+              </span>
+              <div>
+                <h3>Sanad Emergency Hotline</h3>
+                <p>24/7 support</p>
+              </div>
+            </div>
+            <a class="phone-number" href="tel:16555">16555</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <div class="brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8 7.7C21.8 5.7 18 5.2 14.6 6.1C12 7.6 11 10.3 12.5 12.3C13.7 14 16.6 14.4 19.1 15C22.2 15.7 23.7 17.3 23.1 19.4C22.3 22.3 17.9 23.8 14.1 22.5C12.1 21.8 10.7 20.1 9.9 18.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 8.5V15.5M12.5 12H19.5" stroke="#CFEFE7" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-copy"><span>Sanad Hospital</span><small>CARE, CONNECTED</small></span>
+      </div>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="#doctors">Top Doctors</a>
+        <a href="#services">Services</a>
+        <a href="login.html">Patient Portal</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="footer-meta">
+        <span>care@sanadhospital.eg</span>
+        <span>Cairo, Egypt</span>
+        <span>© 2026 Sanad Hospital</span>
+      </div>
+    </div>
+  </footer>
+
+  <div id="doctorModal" class="modal" aria-modal="true" role="dialog">
+    <div class="modal-card">
+      <button type="button" class="close-btn" aria-label="Close" id="closeModal">×</button>
+      <div id="modalContent" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    const words = { en: TRANSLATIONS.en, ar: TRANSLATIONS.ar };
+
+    const escapeCatalog = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const doctorGrid = document.getElementById('doctorGrid');
+    doctorGrid.innerHTML = DOCTORS.map(doctor => `
+      <article class="doctor-card" data-doctor-id="${escapeCatalog(doctor.id)}" data-name="${escapeCatalog(doctor.name_en)}" data-department="${escapeCatalog(doctor.specialty_en)}" data-rate="${doctor.rating}" data-price="${doctor.fee}" data-ar-name="${escapeCatalog(doctor.name_ar)}" data-specialty="${escapeCatalog(doctor.specialty_en)}" data-ar-specialty="${escapeCatalog(doctor.specialty_ar)}" data-title="${escapeCatalog(doctor.title_en)}" data-ar-title="${escapeCatalog(doctor.title_ar)}" data-rating="${doctor.rating}" data-visits="${escapeCatalog(doctor.visits)}" data-fee="${escapeCatalog(doctor.price)}" data-photo="${escapeCatalog(doctor.image)}" data-bio="${escapeCatalog(doctor.bio_en)}" data-ar-bio="${escapeCatalog(doctor.bio_ar)}" data-clinic="${escapeCatalog(doctor.clinic)}" data-ar-clinic="${escapeCatalog(doctor.arClinic)}" data-experience="${escapeCatalog(doctor.experience)}" data-ar-experience="${escapeCatalog(doctor.arExperience)}">
+        <div class="doctor-photo"><img src="${escapeCatalog(doctor.image)}" alt="${escapeCatalog(doctor.name_en)}"><span class="doctor-tag">● Available today</span><span class="doctor-rating">★ ${doctor.rating}</span></div>
+        <div class="doctor-body"><h3>${escapeCatalog(doctor.name_en)}</h3><p class="doctor-role"></p><p class="doctor-description"></p><div class="doctor-meta"><span></span><strong></strong></div><button type="button" class="btn secondary" data-doctor="${escapeCatalog(doctor.id)}">View profile</button></div>
+      </article>`).join('');
+    const serviceGrid = document.getElementById('serviceGrid');
+    serviceGrid.innerHTML = SERVICES.map(service => `
+      <button type="button" class="service-card" data-service-id="${escapeCatalog(service.id)}" data-icon="${escapeCatalog(service.icon)}" data-category="${escapeCatalog(service.category)}" data-department="${escapeCatalog(service.clinic)}" data-rate="${service.rating}" data-reviews="${service.reviews}" data-name="${escapeCatalog(service.name_en)}" data-ar="${escapeCatalog(service.name_ar)}" data-desc="${escapeCatalog(service.description_en)}" data-ar-desc="${escapeCatalog(service.description_ar)}" data-price="${service.priceValue}" data-price-display="${escapeCatalog(service.price)}" data-prep="${escapeCatalog(service.preparation)}" data-ar-prep="${escapeCatalog(service.arPreparation)}" data-duration="${escapeCatalog(service.duration)}" data-clinic="${escapeCatalog(service.clinic)}" data-ar-clinic="${escapeCatalog(service.arClinic)}" data-specialist="${escapeCatalog(service.specialist)}" data-ar-specialist="${escapeCatalog(service.arSpecialist)}">
+        <span class="service-icon"></span><span class="arrow">↗</span><span class="service-rating">★ ${service.rating} <small>(${service.reviews})</small></span><h3>${escapeCatalog(service.name_en)}</h3><p>${escapeCatalog(service.description_en)}</p><strong class="service-price"></strong>
+      </button>`).join('');
+    const doctors = [...doctorGrid.querySelectorAll('.doctor-card')];
+    const services = [...serviceGrid.querySelectorAll('.service-card')];
+    const departments = [...document.querySelectorAll('#deptGrid .dept-card')];
+
+    const state = {
+      lang: document.documentElement.lang === 'ar' ? 'ar' : 'en',
+      theme: localStorage.getItem('sanad_theme') === 'dark' ? 'dark' : 'light',
+      filter: 'all',
+      tab: 'tests',
+      searchQuery: ''
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const isArabic = () => state.lang === 'ar';
+    const t = (key) => words[state.lang][key] || words.en[key] || key;
+    const themeIcons = {
+      light: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>',
+      dark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.5 1.5m11.2 11.2 1.5 1.5M2 12h2m16 0h2M4.9 19.1l1.5-1.5m12.7-12.7 1.5-1.5"/></svg>'
+    };
+
+    function updateDocumentLanguage() {
+      document.documentElement.classList.toggle('dark', state.theme === 'dark');
+      document.documentElement.setAttribute('data-theme', state.theme);
+      document.body.classList.toggle('dark', state.theme === 'dark');
+      localStorage.setItem('sanad_theme', state.theme);
+      document.getElementById('brandTitle').textContent = t('brand');
+      document.getElementById('brandSub').textContent = t('brandSub');
+      document.getElementById('topMessage').textContent = t('topMessage');
+      document.getElementById('openingHours').textContent = t('openingHours');
+      document.getElementById('loginBtn').textContent = t('login');
+      document.getElementById('signupBtn').textContent = t('signup');
+      document.getElementById('heroBadge').textContent = t('heroBadge');
+      document.getElementById('heroTitle').innerText = t('heroTitle');
+      document.getElementById('heroText').textContent = t('heroText');
+      document.getElementById('exploreBtn').textContent = t('exploreBtn');
+      document.getElementById('bookBtn').textContent = t('bookBtn');
+      document.getElementById('welcomeNote').textContent = t('welcomeNote');
+      document.getElementById('doctorsTitle').textContent = t('doctorsTitle');
+      document.getElementById('doctorsDesc').textContent = t('doctorsDesc');
+      document.getElementById('searchInput').placeholder = t('searchPlaceholder');
+      document.getElementById('searchBtn').textContent = t('search');
+      document.querySelectorAll('[data-i18n]').forEach((node) => {
+        const key = node.dataset.i18n;
+        if (t(key) !== undefined) node.textContent = t(key);
+      });
+      document.querySelectorAll('.lang-btn').forEach((button) => {
+        button.classList.toggle('active', button.dataset.lang === state.lang);
+      });
+      document.getElementById('themeToggle').innerHTML = themeIcons[state.theme];
+      renderFilters();
+      renderDoctors();
+      renderTabs();
+      renderServices();
+      renderDepartments();
+    }
+
+    function getDoctorMatches() {
+      return doctors.filter(doctor => {
+        const query = state.searchQuery.toLowerCase();
+        const searchValues = [
+          doctor.dataset.name,
+          doctor.dataset.arName,
+          doctor.dataset.specialty,
+          doctor.dataset.arSpecialty,
+          doctor.textContent,
+          ...Array.from(doctor.attributes)
+            .filter(attribute => attribute.name.startsWith('data-'))
+            .map(attribute => attribute.value)
+        ].map(value => value.toLowerCase());
+        const searchType = $('#searchType').value;
+        const matchesScope = searchType === 'all' || searchType === 'doctor';
+        const matchesQuery = !query || searchValues.some(value => value.includes(query));
+        return matchesScope && matchesQuery && (state.filter === 'all' || doctor.dataset.specialty === state.filter);
+      });
+    }
+
+    function renderFilters() {
+      const options = [
+        { key: 'all', label: t('All doctors') },
+        { key: 'Cardiology', label: t('Cardiology') },
+        { key: 'Pediatrics', label: t('Pediatrics') },
+        { key: 'Orthopedics', label: t('Orthopedics') },
+        { key: 'Neurology', label: t('Neurology') },
+        { key: 'Dermatology', label: t('Dermatology') }
+      ];
+      $('#filters').innerHTML = options.map((option) =>
+        `<button type="button" class="filter ${state.filter === option.key ? 'active' : ''}" data-filter="${option.key}">${option.label}</button>`
+      ).join('');
+      $('#filters').querySelectorAll('[data-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+          state.filter = button.dataset.filter;
+          renderFilters();
+          renderDoctors();
+        });
+      });
+    }
+
+    function renderDoctors() {
+      const visibleDoctors = new Set(getDoctorMatches());
+      doctors.forEach(doctor => {
+        const data = doctor.dataset;
+        const name = isArabic() ? data.arName : data.name;
+        doctor.hidden = !visibleDoctors.has(doctor);
+        doctor.querySelector('img').alt = name;
+        doctor.querySelector('.doctor-tag').textContent = `● ${t('available')}`;
+        doctor.querySelector('h3').textContent = name;
+        doctor.querySelector('.doctor-role').textContent = `${isArabic() ? data.arTitle : data.title} · ${isArabic() ? data.arSpecialty : data.specialty}`;
+        doctor.querySelector('.doctor-description').textContent = isArabic() ? data.arBio : data.bio;
+        doctor.querySelector('.doctor-meta span').textContent = `★ ${data.rating} · ${data.visits} ${t('visits')}`;
+        doctor.querySelector('.doctor-meta strong').textContent = data.fee;
+        doctor.querySelector('[data-doctor]').textContent = t('viewDetails');
+      });
+    }
+
+    function renderTabs() {
+      const tabs = [
+        { key: 'tests', label: t('tabTests') },
+        { key: 'scans', label: t('tabScans') },
+        { key: 'surgery', label: t('tabSurgery') }
+      ];
+      $('#serviceTabs').innerHTML = tabs.map((tab) => `<button type="button" class="tab ${state.tab === tab.key ? 'active' : ''}" data-tab="${tab.key}">${tab.label}</button>`).join('');
+      $('#serviceTabs').querySelectorAll('[data-tab]').forEach((button) => {
+        button.addEventListener('click', () => {
+          state.tab = button.dataset.tab;
+          $('#searchType').value = state.searchQuery ? state.tab : 'all';
+          renderTabs();
+          renderServices();
+        });
+      });
+    }
+
+    function renderServices() {
+      services.forEach(item => {
+        const data = item.dataset;
+        const text = `${item.textContent} ${Array.from(item.attributes).filter(attribute => attribute.name.startsWith('data-')).map(attribute => attribute.value).join(' ')}`.toLowerCase();
+        const searchType = $('#searchType').value;
+        const matchesScope = searchType === 'all' || searchType === data.category;
+        const matchesQuery = !state.searchQuery || text.includes(state.searchQuery);
+        const activeCategory = searchType === 'all' || searchType === 'doctor' ? state.tab : searchType;
+        item.hidden = state.searchQuery ? !(matchesScope && matchesQuery) : searchType === 'doctor' || data.category !== activeCategory;
+        item.querySelector('.service-icon').innerHTML = iconFor(data.icon);
+        item.querySelector('h3').textContent = isArabic() ? data.ar : data.name;
+        item.querySelector('p').textContent = isArabic() ? data.arDesc : data.desc;
+        item.querySelector('.service-price').textContent = `${t('servicePrice')}: ${data.priceDisplay}`;
+      });
+    }
+
+    function applyCatalogSearch() {
+      state.searchQuery = $('#searchInput').value.trim().toLowerCase();
+      renderDoctors();
+      renderServices();
+    }
+
+    function sortCatalogCards(parentSelector, cardSelector, sortKey) {
+      const parent = $(parentSelector);
+      const cards = Array.from(parent.querySelectorAll(cardSelector));
+      cards.sort((first, second) => {
+        const firstValue = first.dataset[sortKey] || '';
+        const secondValue = second.dataset[sortKey] || '';
+        if (sortKey === 'rate' || sortKey === 'price') {
+          const difference = Number(firstValue) - Number(secondValue);
+          return sortKey === 'rate' ? -difference : difference;
+        }
+        return firstValue.localeCompare(secondValue, undefined, {sensitivity:'base'});
+      });
+      cards.forEach(card => parent.appendChild(card));
+    }
+
+    function renderDepartments() {
+      departments.forEach(department => {
+        const data = department.dataset;
+        department.querySelector('.dept-icon').innerHTML = iconFor(data.icon);
+        department.querySelector('h3').textContent = isArabic() ? data.arName : data.name;
+        department.querySelector('p').textContent = isArabic() ? data.arHours : data.hours;
+      });
+    }
+
+    function iconFor(key) {
+      const icons = {
+        heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.3-9.2-8.6C1.3 9.3 3.1 4 7.8 4c2.1 0 3.4 1 4.2 2.2C12.8 5 14.1 4 16.2 4c4.7 0 6.5 5.3 5 8.4C19 16.7 12 21 12 21Z"/></svg>',
+        child: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M6 19c1.3-3 3.2-4.5 6-4.5s4.7 1.5 6 4.5"/></svg>',
+        bone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7.5 16.5 17M5 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Zm13.5 9a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>',
+        brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5.5a3 3 0 0 0-3 3v1a3 3 0 0 0 1 2.3V12a3 3 0 0 0-1 2.2v1a3 3 0 0 0 3 3h1.2A3 3 0 0 0 12 18.5a3 3 0 0 0 1.8 2.7H15a3 3 0 0 0 3-3v-1A3 3 0 0 0 17 12v-.5A3 3 0 0 0 18 9.2v-1a3 3 0 0 0-3-3h-1.1a3 3 0 0 0-2.7 1.9A3 3 0 0 0 9 5.5Z"/></svg>',
+        plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>',
+        scan: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 4v4M20 12h-4M12 20v-4M4 12h4"/></svg>',
+        lab: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6m-5 0v6l-5 8a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-8V3M8 15h8"/></svg>',
+        surgery: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7.5 16.5 17M5 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Zm13.5 9a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>'
+      };
+      return icons[key] || icons.plus;
+    }
+
+    function openDoctor(id) {
+      const doctor = doctors.find(item => Number(item.dataset.doctorId) === id);
+      if (!doctor) return;
+      const data = doctor.dataset;
+      const name = isArabic() ? data.arName : data.name;
+      $('#modalContent').innerHTML = `
+        <div class="modal-info">
+          <img src="${data.photo}" alt="${name}">
+          <div>
+            <h3>${name}</h3>
+            <p>${isArabic() ? data.arTitle : data.title} · ${isArabic() ? data.arSpecialty : data.specialty}</p>
+            <div class="stars">★★★★★ ${data.rating}</div>
+          </div>
+        </div>
+        <div class="fee-box">
+          <span>${t('feeLabel')}</span>
+          <strong>${data.fee}</strong>
+        </div>
+        <div class="modal-grid">
+          <div>
+            <h4>${t('modalBio')}</h4>
+            <p>${isArabic() ? data.arBio : data.bio}</p>
+            <h4 style="margin-top:16px">${t('modalExp')}</h4>
+            <p>${isArabic() ? data.arExperience : data.experience}</p>
+          </div>
+          <div>
+            <h4>${t('modalClinics')}</h4>
+            <p>${isArabic() ? data.arClinic : data.clinic}</p>
+            <h4 style="margin-top:16px">${t('modalReviews')}</h4>
+            <p>Verified patient feedback from recent visits.</p>
+          </div>
+        </div>
+        <div class="reviews">
+          <h4 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">${t('modalReviews')}</h4>
+          <div class="review-list">
+            <article class="review"><div class="review-head"><span>R. J.</span><span>April 2026</span></div><p>${isArabic() ? 'د. شاملة، توضّح الأمور ببساطة ومعاملة لطيفة جدًا.' : 'Clear guidance, warm bedside manner, and a reassuring experience from start to finish.'}</p></article>
+            <article class="review"><div class="review-head"><span>M. A.</span><span>May 2026</span></div><p>${isArabic() ? 'الاستشارة كانت دقيقة جدًا، وأحسست أنني على أتم استعداد.' : 'Professional, attentive, and very clear about the next steps in my care.'}</p></article>
+            <article class="review"><div class="review-head"><span>S. I.</span><span>June 2026</span></div><p>${isArabic() ? 'العيادة نظيفة، والطبيب محترف، وسهلة جدًا في التواصل.' : 'Clean clinic, warm approach, and excellent communication throughout the visit.'}</p></article>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn primary" data-book-doctor="${data.doctorId}">${t('bookWith')} ${name}</button>
+        </div>
+      `;
+      $('#doctorModal').classList.add('open');
+      $('#doctorModal').querySelector('[data-book-doctor]')?.addEventListener('click', event => {
+        event.preventDefault();
+        routeBookingToDashboard('appointment', data.doctorId);
+      });
+    }
+
+    function openService(item) {
+      if (!item) return;
+      const data = item.dataset;
+      $('#modalContent').innerHTML = `
+        <div class="fee-box">
+          <span>${t('servicePrice')}</span>
+          <strong>${data.priceDisplay}</strong>
+        </div>
+        <div class="modal-grid">
+          <div>
+            <h4>${t('tabTests')}</h4>
+            <p>${isArabic() ? data.ar : data.name}</p>
+            <h4 style="margin-top:16px">${t('prep')}</h4>
+            <p>${isArabic() ? data.arPrep : data.prep}</p>
+          </div>
+          <div>
+            <h4>${t('duration')}</h4>
+            <p>${data.duration}</p>
+            <h4 style="margin-top:16px">${t('clinic')}</h4>
+            <p>${isArabic() ? data.arClinic : data.clinic}</p>
+            <h4 style="margin-top:16px">${t('specialist')}</h4>
+            <p>${isArabic() ? data.arSpecialist : data.specialist}</p>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn primary" id="serviceBookBtn">${t('bookBtn')}</button>
+        </div>
+      `;
+      $('#doctorModal').classList.add('open');
+      $('#serviceBookBtn').addEventListener('click', event => {
+        event.preventDefault();
+        routeBookingToDashboard('service', data.serviceId);
+      });
+    }
+
+    function showBookingConfirmation() {
+      const confirmation = $('#bookingConfirmation');
+      confirmation.classList.add('open');
+      confirmation.setAttribute('aria-hidden', 'false');
+      $('#closeBookingConfirmation').focus();
+    }
+
+    function setupSuggestions() {
+      const input = $('#searchInput');
+      const suggestions = $('#suggestions');
+      input.addEventListener('input', () => {
+        const query = input.value.trim().toLowerCase();
+        applyCatalogSearch();
+        if (!query || !['all', 'doctor'].includes($('#searchType').value)) {
+          suggestions.classList.remove('show');
+          suggestions.replaceChildren();
+          return;
+        }
+        const matches = getDoctorMatches().slice(0, 5);
+        suggestions.replaceChildren();
+        if (!matches.length) {
+          const empty = document.createElement('div');
+          empty.className = 'suggest-item';
+          empty.textContent = t('No matches found');
+          suggestions.append(empty);
+        }
+        matches.forEach(doctor => {
+          const data = doctor.dataset;
+          const label = isArabic() ? data.arName : data.name;
+          const subtitle = isArabic() ? data.arSpecialty : data.specialty;
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'suggest-item';
+          button.dataset.doctor = data.doctorId;
+          const image = document.createElement('img');
+          image.src = data.photo;
+          image.alt = label;
+          const text = document.createElement('span');
+          const name = document.createElement('strong');
+          name.textContent = label;
+          const specialty = document.createElement('small');
+          specialty.textContent = subtitle;
+          text.append(name, specialty);
+          button.append(image, text);
+          suggestions.append(button);
+        });
+        suggestions.classList.add('show');
+        suggestions.querySelectorAll('[data-doctor]').forEach((button) => {
+          button.addEventListener('click', () => {
+            const id = Number(button.dataset.doctor);
+            openDoctor(id);
+            suggestions.classList.remove('show');
+            input.value = '';
+            applyCatalogSearch();
+          });
+        });
+      });
+    }
+
+    $('#searchBtn').addEventListener('click', () => {
+      const q = $('#searchInput').value.trim().toLowerCase();
+      applyCatalogSearch();
+      if (!q) return;
+      const scope = $('#searchType').value;
+      const match = getDoctorMatches().find(doctor => !doctor.hidden);
+      if (match && (scope === 'all' || scope === 'doctor')) {
+        openDoctor(Number(match.dataset.doctorId));
+      } else {
+        const firstService = services.find(service => !service.hidden);
+        document.getElementById('services').scrollIntoView({behavior:'smooth'});
+        firstService?.focus({preventScroll:true});
+      }
+    });
+
+    $('#bookBtn').addEventListener('click', event => {
+      event.preventDefault();
+      routeBookingToDashboard('appointment');
+    });
+    document.addEventListener('submit', event => {
+      if (!(event.target instanceof HTMLFormElement)) return;
+      const form = event.target;
+      const bookingForm = form.matches('[data-booking-form], [data-booking-type]') ||
+        /booking|appointment|service/i.test(`${form.id} ${form.className}`);
+      if (!bookingForm) return;
+      event.preventDefault();
+      routeBookingToDashboard(form.dataset.bookingType === 'service' ? 'service' : 'appointment');
+    });
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      $('#doctorModal').classList.remove('open');
+    });
+    $('#closeBookingConfirmation').addEventListener('click', () => {
+      $('#bookingConfirmation').classList.remove('open');
+      $('#bookingConfirmation').setAttribute('aria-hidden', 'true');
+    });
+    $('#bookingConfirmation').addEventListener('click', event => {
+      if (event.target === $('#bookingConfirmation')) {
+        $('#bookingConfirmation').classList.remove('open');
+        $('#bookingConfirmation').setAttribute('aria-hidden', 'true');
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && $('#bookingConfirmation').classList.contains('open')) {
+        $('#bookingConfirmation').classList.remove('open');
+        $('#bookingConfirmation').setAttribute('aria-hidden', 'true');
+      }
+    });
+    $('#doctorModal').addEventListener('click', (event) => {
+      if (event.target === $('#doctorModal')) $('#doctorModal').classList.remove('open');
+    });
+
+    $('#doctorGrid').addEventListener('click', event => {
+      const button = event.target.closest('[data-doctor]');
+      if (button) openDoctor(Number(button.dataset.doctor));
+    });
+    $('#serviceGrid').addEventListener('click', event => {
+      const card = event.target.closest('.service-card');
+      if (card) openService(card);
+    });
+
+    $('#doctorSort').addEventListener('change', event => {
+      sortCatalogCards('#doctorGrid', '.doctor-card', event.currentTarget.value);
+      renderDoctors();
+    });
+    $('#serviceSort').addEventListener('change', event => {
+      sortCatalogCards('#serviceGrid', '.service-card', event.currentTarget.value);
+      renderServices();
+    });
+    $('#searchType').addEventListener('change', () => {
+      const category = $('#searchType').value;
+      if (category === 'tests' || category === 'scans' || category === 'surgery') state.tab = category;
+      renderTabs();
+      applyCatalogSearch();
+    });
+
+    $('#themeToggle').addEventListener('click', () => {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('sanad_theme', state.theme);
+      const params = new URLSearchParams(location.search);
+      params.set('theme', state.theme);
+      params.set('lang', state.lang);
+      history.replaceState(null, '', `${location.pathname}?${params.toString()}`);
+      updateDocumentLanguage();
+    });
+
+    window.addEventListener('sanadlanguagechange', event => {
+      event.preventDefault();
+      state.lang = event.detail.language;
+      updateDocumentLanguage();
+    });
+
+    updateDocumentLanguage();
+    setupSuggestions();
+
+    function routeBookingToDashboard(bookingType, catalogId) {
+      const params = new URLSearchParams({lang:state.lang,theme:state.theme});
+      params.set(bookingType === 'appointment' ? 'doctor' : 'service', catalogId);
+      if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+        location.href = `login.html?${params}`;
+        return;
+      }
+      const role = sessionStorage.getItem('userRole') || 'patient';
+      let destination = 'patient-dashboard.html';
+      if (role === 'admin') {
+        destination = 'admin-dashboard.html';
+      } else if (role === 'doctor') {
+        destination = 'doctor-dashboard.html';
+      } else if (role === 'nurse') {
+        destination = 'nurse-dashboard.html';
+      }
+      params.set('booking', bookingType);
+      location.href = `${destination}?${params}`;
+    }
+  </script>
+  <script src="home-auth.js"></script>
+  <script src="site-ui.js"></script>
+</body>
+</html>

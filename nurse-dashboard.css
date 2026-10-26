@@ -1,0 +1,258 @@
+body.admin-body.nurse-body {
+  visibility: hidden
+}
+body.admin-body.nurse-body.authorized {
+  visibility: visible
+}
+.nurse-main {
+  max-width: 1400px;
+  min-height: 100vh
+}
+.nurse-section {
+  display: block
+}
+.nurse-section.active-section {
+  display: block
+}
+.schedule-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 12px;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700
+}
+.schedule-filter select {
+  min-height: 34px;
+  min-width: 190px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 10px
+}
+.schedule-filter select:focus {
+  outline: 2px solid color-mix(in srgb,var(--color-brand) 25%,transparent);
+  border-color: var(--color-brand)
+}
+.nurse-table-scroll {
+  margin-bottom: 28px
+}
+.nurse-status-select {
+  min-width: 124px;
+  min-height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700
+}
+.nurse-status-select.status-completed {
+  border-color: color-mix(in srgb,var(--color-success) 40%,var(--color-border));
+  background: var(--color-success-bg);
+  color: var(--color-success)
+}
+.nurse-status-select.status-postponed {
+  border-color: color-mix(in srgb,var(--color-warning) 40%,var(--color-border));
+  background: var(--color-warning-bg);
+  color: var(--color-warning)
+}
+.nurse-status-select.status-cancelled {
+  border-color: color-mix(in srgb,var(--color-danger) 40%,var(--color-border));
+  background: var(--color-danger-bg);
+  color: var(--color-danger)
+}
+.status-pill.pending {
+  background: var(--color-warning-bg);
+  color: var(--color-warning)
+}
+.status-pill.rescheduled {
+  background: var(--color-info-bg);
+  color: var(--color-info)
+}
+.status-pill.in-progress {
+  background: var(--color-info-bg);
+  color: var(--color-info)
+}
+.status-pill.completed {
+  background: var(--color-success-bg);
+  color: var(--color-success)
+}
+.schedule-form-heading {
+  margin-top: 30px
+}
+.nurse-form {
+  grid-template-columns: repeat(4,minmax(130px,1fr))
+}
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+  margin-top: 18px
+}
+.task-card {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel)
+}
+.task-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px
+}
+.task-card-heading .section-kicker {
+  margin: 0 0 6px
+}
+.task-card h3 {
+  margin: 0;
+  font: 700 14px/1.35 Manrope,'Noto Sans Arabic',sans-serif
+}
+.task-patient {
+  margin: 14px 0 7px;
+  font-size: 10px
+}
+.task-patient strong {
+  color: var(--color-brand-strong)
+}
+.vitals-summary {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  line-height: 1.8
+}
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: 15px
+}
+.vitals-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: var(--color-overlay)
+}
+.vitals-modal.open {
+  display: flex
+}
+.vitals-card {
+  width: min(480px,100%);
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel)
+}
+.vitals-card .panel-heading {
+  margin-bottom: 8px
+}
+.vitals-card .panel-heading h2 {
+  font-size: 17px
+}
+.vitals-close {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 20px;
+  line-height: 1
+}
+.vitals-patient {
+  margin: 6px 0 16px;
+  color: var(--color-text-muted);
+  font-size: 10px
+}
+.vitals-patient strong {
+  color: var(--color-text)
+}
+.vitals-card>label {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 700
+}
+.vitals-card input {
+  height: 37px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-size: 11px
+}
+.vitals-card input:focus {
+  outline: 2px solid color-mix(in srgb,var(--color-brand) 20%,transparent);
+  border-color: var(--color-brand)
+}
+.vitals-card .form-actions {
+  justify-content: flex-end;
+  margin-top: 16px
+}
+@media (max-width: 1024px) {
+  .nurse-form {
+    grid-template-columns: repeat(2,minmax(0,1fr))
+  }
+  .task-grid {
+    grid-template-columns: 1fr
+  }
+}
+@media (max-width: 768px) {
+  .admin-layout {
+    grid-template-columns: 1fr
+  }
+  .admin-main {
+    width: 100%;
+    padding-top: 24px
+  }
+}
+@media (max-width: 480px) {
+  .nurse-form {
+    grid-template-columns: 1fr
+  }
+  .admin-topbar {
+    padding: 8px 12px
+  }
+  .admin-top-actions {
+    gap: 5px
+  }
+  .admin-user {
+    display: none
+  }
+
+  .schedule-filter {
+    align-items: flex-start;
+    flex-direction: column
+  }
+  .schedule-filter select {
+    width: 100%
+  }
+}
+.control-button.back-to-site {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  vertical-align: middle;
+  padding: 0.5rem 1rem;
+  color: var(--color-text-dark, #0f172a);
+}
+.dark .control-button.back-to-site {
+  color: var(--color-text);
+}

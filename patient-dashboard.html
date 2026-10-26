@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>(() => { const t = localStorage.getItem('sanad_theme') || 'light'; if(t === 'dark'){ document.documentElement.classList.add('dark'); document.documentElement.setAttribute('data-theme', 'dark'); } })();</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f4">
+  <title>Patient Dashboard | Sanad Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="patient-dashboard.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="translations.js"></script>
+  <script src="language.js"></script>
+  <script src="mock-data.js" defer></script>
+  <script src="patient-dashboard.js" defer></script>
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <a class="admin-brand" href="index.html" aria-label="Sanad Hospital home">
+      <span class="admin-brand-mark" aria-hidden="true">S<span>+</span></span>
+      <span>Sanad Hospital<small>PATIENT CARE</small></span>
+    </a>
+    <div class="admin-top-actions">
+      <span class="admin-user" id="patientGreeting">Patient</span>
+      <button class="control-button" id="languageToggle" type="button" aria-label="Change language">العربية</button>
+      <button class="control-button icon-control" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></button>
+      <a class="control-button patient-home back-to-site" href="index.html">Back to Site</a>
+      <button class="control-button logout-control" id="logoutButton" type="button">Log Out</button>
+    </div>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="sidebar-brand" href="index.html" aria-label="Sanad Hospital home">
+        <span class="admin-brand-mark" aria-hidden="true">S<span>+</span></span>
+        <span>Sanad Hospital<small>PATIENT WORKSPACE</small></span>
+      </a>
+      <div class="sidebar-label">PATIENT WORKSPACE</div>
+      <nav id="patientNav" aria-label="Patient sections">
+        <a href="#appointments" class="active" data-section="appointments">Book an Appointment</a>
+        <a href="#services" data-section="services">Book a Service</a>
+        <a href="#prescriptions" data-section="prescriptions">View Prescriptions</a>
+        <a href="#history" data-section="history">Past Appointments &amp; Results</a>
+      </nav>
+      <div class="sidebar-foot"><span class="live-indicator"></span><span>YOUR CARE, CONNECTED</span></div>
+    </aside>
+    <main class="admin-main patient-main">
+      <section class="admin-section page-intro patient-intro">
+        <div><span class="section-kicker">SANAD / PATIENT CARE</span><h1>Patient Dashboard</h1><p>Book care, review prescriptions, and rate completed services.</p></div>
+        <div class="today-chip"><span class="live-indicator"></span><time id="todayLabel"></time></div>
+      </section>
+
+      <section class="admin-section management-section patient-section active-section" id="appointments" data-panel="appointments">
+        <div class="section-heading"><div><span class="section-kicker">APPOINTMENT BOOKING</span><h2>Book an Appointment</h2><p>Choose a specialist and a convenient time for your visit.</p></div></div>
+        <form class="editor-form patient-form" id="appointmentForm">
+          <fieldset class="patient-fieldset patient-wide-field"><legend data-i18n="chooseDoctor">Choose a doctor</legend><div class="patient-choice-grid" id="doctorOptions"></div></fieldset>
+          <fieldset class="patient-fieldset patient-wide-field date-selection"><legend data-i18n="appointmentDate">Appointment date</legend><label><span data-i18n="month">Month</span><select name="month" id="appointmentMonth" required></select></label><label><span data-i18n="day">Day</span><select name="day" id="appointmentDay" required></select></label></fieldset>
+          <label>Preferred time<select name="time" required><option value="">Select a time</option><option>09:00</option><option>10:30</option><option>12:00</option><option>14:00</option><option>16:30</option></select></label>
+          <label class="patient-wide-field">Reason for visit<input name="reason" type="text" maxlength="140" placeholder="Briefly describe the reason for your visit" required></label>
+          <div class="form-actions"><button class="primary-button" type="submit">Prepare Appointment Request</button></div>
+        </form>
+      </section>
+
+      <section class="admin-section management-section patient-section" id="services" data-panel="services">
+        <div class="section-heading"><div><span class="section-kicker">SERVICES &amp; TESTS</span><h2>Book a Service</h2><p>Select a medical service or test and request an appointment.</p></div></div>
+        <form class="editor-form patient-form" id="serviceForm">
+          <fieldset class="patient-fieldset patient-wide-field"><legend data-i18n="chooseService">Choose a service</legend><div class="patient-choice-grid service-choice-grid" id="serviceOptions"></div></fieldset>
+          <fieldset class="patient-fieldset patient-wide-field date-selection"><legend data-i18n="preferredDate">Preferred date</legend><label><span data-i18n="month">Month</span><select name="month" id="serviceMonth" required></select></label><label><span data-i18n="day">Day</span><select name="day" id="serviceDay" required></select></label></fieldset>
+          <label>Preferred time<select name="time" required><option value="">Select a time</option><option>08:30</option><option>10:00</option><option>11:30</option><option>13:00</option><option>15:00</option></select></label>
+          <label class="patient-wide-field">Notes (optional)<input name="notes" type="text" maxlength="140" placeholder="Preparation questions or additional details"></label>
+          <div class="form-actions"><button class="primary-button" type="submit">Prepare Service Request</button></div>
+        </form>
+      </section>
+
+      <section class="admin-section management-section patient-section" id="prescriptions" data-panel="prescriptions">
+        <div class="section-heading"><div><span class="section-kicker">YOUR CARE PLAN</span><h2>View Prescriptions</h2><p>Sample prescriptions issued by your care team.</p></div></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Doctor Name</th><th>Date</th><th>Diagnosis</th><th>Medication list</th><th>Dosage</th></tr></thead>
+            <tbody>
+              <tr><td>Dr. Lina Hassan</td><td>18 Oct 2026</td><td>Migraine</td><td>Sumatriptan</td><td>50 mg as needed</td></tr>
+              <tr><td>Dr. Salma Fathy</td><td>09 Oct 2026</td><td>Vitamin D deficiency</td><td>Cholecalciferol</td><td>2,000 IU once daily</td></tr>
+              <tr><td>Dr. Omar Farouk</td><td>22 Sep 2026</td><td>Seasonal allergy</td><td>Cetirizine</td><td>10 mg once daily</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section management-section patient-section" id="history" data-panel="history">
+        <div class="section-heading"><div><span class="section-kicker">COMPLETED CARE</span><h2>Past Appointments &amp; Service Results</h2><p>Rate completed visits and services from one to five stars.</p></div></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Type</th><th>Date</th><th>Doctor / Service</th><th>Diagnosis / Result</th><th>Rating</th></tr></thead>
+            <tbody>
+              <tr><td>Appointment</td><td>18 Oct 2026</td><td>Dr. Lina Hassan</td><td>Migraine follow-up; symptoms improved</td><td><div class="rating-widget" data-rating-widget aria-label="Rate appointment with Dr. Lina Hassan"><span class="rating-star" role="button" tabindex="0" data-star="1" aria-label="1 star">★</span><span class="rating-star" role="button" tabindex="0" data-star="2" aria-label="2 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="3" aria-label="3 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="4" aria-label="4 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="5" aria-label="5 stars">★</span><small class="rating-value" aria-live="polite">Not rated</small></div></td></tr>
+              <tr><td>Service result</td><td>09 Oct 2026</td><td>Vitamin D test</td><td>Vitamin D level: 24 ng/mL</td><td><div class="rating-widget" data-rating-widget aria-label="Rate Vitamin D test"><span class="rating-star" role="button" tabindex="0" data-star="1" aria-label="1 star">★</span><span class="rating-star" role="button" tabindex="0" data-star="2" aria-label="2 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="3" aria-label="3 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="4" aria-label="4 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="5" aria-label="5 stars">★</span><small class="rating-value" aria-live="polite">Not rated</small></div></td></tr>
+              <tr><td>Appointment</td><td>22 Sep 2026</td><td>Dr. Omar Farouk</td><td>Seasonal allergy review; treatment plan updated</td><td><div class="rating-widget" data-rating-widget aria-label="Rate appointment with Dr. Omar Farouk"><span class="rating-star" role="button" tabindex="0" data-star="1" aria-label="1 star">★</span><span class="rating-star" role="button" tabindex="0" data-star="2" aria-label="2 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="3" aria-label="3 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="4" aria-label="4 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="5" aria-label="5 stars">★</span><small class="rating-value" aria-live="polite">Not rated</small></div></td></tr>
+              <tr><td>Service result</td><td>12 Sep 2026</td><td>Complete blood count</td><td>Results within expected reference ranges</td><td><div class="rating-widget" data-rating-widget aria-label="Rate complete blood count"><span class="rating-star" role="button" tabindex="0" data-star="1" aria-label="1 star">★</span><span class="rating-star" role="button" tabindex="0" data-star="2" aria-label="2 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="3" aria-label="3 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="4" aria-label="4 stars">★</span><span class="rating-star" role="button" tabindex="0" data-star="5" aria-label="5 stars">★</span><small class="rating-value" aria-live="polite">Not rated</small></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <template id="reviewFeedbackTemplate">
+          <div class="review-feedback">
+            <label class="review-feedback-label" for="">Write a review
+              <textarea class="review-feedback-text" maxlength="600" required placeholder="Share details about your experience"></textarea>
+            </label>
+            <button class="text-button review-submit" type="button">Submit review</button>
+          </div>
+        </template>
+      </section>
+    </main>
+  </div>
+
+  <div class="patient-modal" id="bookingConfirmation" role="dialog" aria-modal="true" aria-labelledby="confirmationTitle" aria-hidden="true">
+    <div class="patient-confirmation-card">
+      <span class="patient-confirmation-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span>
+      <h2 id="confirmationTitle">Appointment Request Prepared Successfully</h2>
+      <p id="confirmationDetails">Your request is ready for the hospital team.</p>
+      <button class="primary-button" id="closeConfirmation" type="button">Close</button>
+    </div>
+  </div>
+  <script src="site-ui.js"></script>
+</body>
+</html>

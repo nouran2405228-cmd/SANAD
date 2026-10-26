@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>(() => { const t = localStorage.getItem('sanad_theme') || 'light'; if(t === 'dark'){ document.documentElement.classList.add('dark'); document.documentElement.setAttribute('data-theme', 'dark'); } })();</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f4">
+  <title>Admin Dashboard | Sanad Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="translations.js"></script>
+  <script src="language.js"></script>
+  <script src="mock-data.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <a class="admin-brand" href="index.html" aria-label="Sanad Hospital home">
+      <span class="admin-brand-mark" aria-hidden="true">S<span>+</span></span>
+      <span id="brandText">Sanad Hospital<small>ADMINISTRATION</small></span>
+    </a>
+    <div class="admin-top-actions">
+      <span class="admin-user" id="adminUser"></span>
+      <span class="admin-role-title" id="adminRoleTitle"></span>
+      <a class="control-button back-to-site" href="index.html">Back to Site</a>
+      <button class="control-button" id="languageToggle" type="button">العربية</button>
+      <button class="control-button icon-control" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></button>
+      <button class="control-button logout-control" id="logoutButton" type="button">Log Out</button>
+    </div>
+  </header>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="sidebar-brand" href="index.html" aria-label="Sanad Hospital home">
+        <span class="admin-brand-mark" aria-hidden="true">S<span>+</span></span>
+        <span>Sanad Hospital<small>ADMIN WORKSPACE</small></span>
+      </a>
+      <div class="sidebar-label" data-i18n="workspace">WORKSPACE</div>
+      <nav id="adminNav" aria-label="Admin sections">
+        <a href="#overview" class="active" data-section="overview" data-rbac="super" data-i18n="overview">Overview</a>
+        <a href="#staff" data-section="staff" data-rbac="super staff" data-i18n="staff">Staff management</a>
+        <a href="#departments" data-section="departments" data-rbac="super" data-i18n="departments">Departments</a>
+        <a href="#directory" data-section="directory" data-rbac="super staff" data-i18n="directory">Doctors & resources</a>
+        <a href="#doctor-requests" data-section="doctor-requests" data-rbac="super staff" data-request-i18n="navTitle">Staff registration requests</a>
+        <a href="#inventory" data-section="inventory" data-rbac="super" data-i18n="inventory">Inventory & alerts</a>
+        <a href="#patient-metrics" data-section="patient-metrics" data-rbac="patient" data-rbac-i18n="patientMetrics">Patient Metrics</a>
+        <a href="#patient-records" data-section="patient-records" data-rbac="patient" data-rbac-i18n="patientRecords">Patient Records</a>
+      </nav>
+      <div class="sidebar-foot"><span class="live-indicator"></span><span data-i18n="localMode">ADMIN WORKSPACE</span></div>
+    </aside>
+    <main class="admin-main">
+      <section class="admin-section page-intro" id="overview" data-rbac="super">
+        <div><span class="section-kicker" data-i18n="overviewKicker">SANAD / ADMINISTRATION</span><h1 data-i18n="dashboardTitle">Hospital overview</h1><p data-i18n="dashboardIntro">Operations, access, and care activity in one place.</p></div>
+        <div class="today-chip"><span class="live-indicator"></span><span id="todayLabel"></span></div>
+      </section>
+      <section class="admin-section management-section" id="staff" data-rbac="super staff">
+        <div class="section-heading"><div><span class="section-kicker" data-i18n="peopleKicker">PEOPLE & ROSTERS</span><h2 data-i18n="staffTitle">Staff management</h2><p data-i18n="staffIntro">Assign clinics and shifts, and manage active staff.</p></div></div>
+        <form class="editor-form" id="staffForm" data-form="staff"><input type="hidden" name="id"><label><span data-i18n="fullName">Full name</span><input name="name" required></label><label><span data-i18n="position">Position</span><input name="position" required></label><label><span data-i18n="clinic">Clinic</span><input name="clinic" required></label><label><span data-i18n="shift">Shift</span><select name="shift"><option value="Morning">Morning</option><option value="Evening">Evening</option><option value="Night">Night</option></select></label><label class="check-label"><input name="active" type="checkbox" checked><span data-i18n="activeStaff">Active staff member</span></label><div class="form-actions"><button class="primary-button" type="submit" data-i18n="saveStaff">Add staff</button><button class="text-button cancel-edit" type="button" data-form-reset="staff" data-i18n="cancel">Cancel</button></div></form>
+        <div class="table-scroll"><table><thead><tr><th data-i18n="fullName">Full name</th><th data-i18n="position">Position</th><th data-i18n="clinic">Clinic</th><th data-i18n="shift">Shift</th><th data-i18n="status">Status</th><th data-i18n="actions">Actions</th></tr></thead><tbody id="staffRows">
+          <tr data-id="staff-1" data-name="Dr. Salma Fathy" data-position="Laboratory Consultant" data-clinic="Central Laboratory" data-shift="Morning" data-active="true"><td>Dr. Salma Fathy</td><td>Laboratory Consultant</td><td>Central Laboratory</td><td>Morning</td><td>Active</td><td></td></tr>
+          <tr data-id="staff-2" data-name="Mina Youssef" data-position="Senior Nurse" data-clinic="Emergency Unit" data-shift="Night" data-active="true"><td>Mina Youssef</td><td>Senior Nurse</td><td>Emergency Unit</td><td>Night</td><td>Active</td><td></td></tr>
+          <tr data-id="staff-3" data-name="Nour Adel" data-position="Patient Coordinator" data-clinic="Outpatient Center" data-shift="Evening" data-active="false"><td>Nour Adel</td><td>Patient Coordinator</td><td>Outpatient Center</td><td>Evening</td><td>Inactive</td><td></td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section class="admin-section management-section" id="departments" data-rbac="super">
+        <div class="section-heading"><div><span class="section-kicker" data-i18n="structureKicker">HOSPITAL STRUCTURE</span><h2 data-i18n="departmentsTitle">Department manager</h2><p data-i18n="departmentsIntro">Edit department ownership, or archive units no longer in service.</p></div></div>
+        <form class="editor-form" id="departmentForm" data-form="department"><input type="hidden" name="id"><label><span data-i18n="departmentName">Department name</span><input name="name" required></label><label><span data-i18n="arabicName">Arabic name</span><input name="arName" dir="auto"></label><label><span data-i18n="lead">Department lead</span><input name="lead" required></label><label><span data-i18n="clinic">Primary clinic</span><input name="clinic" required></label><label><span data-i18n="status">Status</span><select name="status"><option value="active">Active</option><option value="archived">Archived</option></select></label><div class="form-actions"><button class="primary-button" type="submit" data-i18n="saveDepartment">Add department</button><button class="text-button cancel-edit" type="button" data-form-reset="department" data-i18n="cancel">Cancel</button></div></form>
+        <div class="table-scroll"><table><thead><tr><th data-i18n="departmentName">Department name</th><th data-i18n="lead">Department lead</th><th data-i18n="clinic">Primary clinic</th><th data-i18n="doctorCount">Doctors</th><th data-i18n="status">Status</th><th data-i18n="actions">Actions</th></tr></thead><tbody id="departmentRows">
+          <tr data-id="dept-1" data-name="Cardiology" data-ar-name="أمراض القلب" data-lead="Dr. Anya Sharma" data-clinic="Heart &amp; Vascular Clinic" data-status="active"><td>Cardiology</td><td>Dr. Anya Sharma</td><td>Heart &amp; Vascular Clinic</td><td>1</td><td>Active</td><td></td></tr>
+          <tr data-id="dept-2" data-name="Pediatrics" data-ar-name="طب الأطفال" data-lead="Dr. Omar Farouk" data-clinic="Children’s Health Center" data-status="active"><td>Pediatrics</td><td>Dr. Omar Farouk</td><td>Children’s Health Center</td><td>1</td><td>Active</td><td></td></tr>
+          <tr data-id="dept-3" data-name="Orthopedics" data-ar-name="جراحة العظام" data-lead="Dr. Layla Hassan" data-clinic="Bone &amp; Joint Clinic" data-status="active"><td>Orthopedics</td><td>Dr. Layla Hassan</td><td>Bone &amp; Joint Clinic</td><td>1</td><td>Active</td><td></td></tr>
+          <tr data-id="dept-4" data-name="Neurology" data-ar-name="طب الأعصاب" data-lead="Dr. Karim Nassar" data-clinic="Neurology &amp; Spine Center" data-status="active"><td>Neurology</td><td>Dr. Karim Nassar</td><td>Neurology &amp; Spine Center</td><td>0</td><td>Active</td><td></td></tr>
+          <tr data-id="dept-5" data-name="Dermatology" data-ar-name="الأمراض الجلدية" data-lead="Dr. Nour El-Din" data-clinic="Skin Health Clinic" data-status="active"><td>Dermatology</td><td>Dr. Nour El-Din</td><td>Skin Health Clinic</td><td>0</td><td>Active</td><td></td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section class="admin-section management-section" id="directory" data-rbac="super staff">
+        <div class="section-heading"><div><span class="section-kicker" data-i18n="careKicker">CARE DIRECTORY</span><h2 data-i18n="directoryTitle">Doctors & medical resources</h2><p data-i18n="directoryIntro">Maintain doctor profiles and patient-facing services.</p></div></div>
+        <div class="subsection"><h3 data-i18n="doctorProfiles">Doctor profiles</h3>
+          <form class="editor-form" id="doctorForm" data-form="doctor"><input type="hidden" name="id"><label><span data-i18n="fullName">Full name</span><input name="name" required></label><label><span data-i18n="arabicName">Arabic name</span><input name="arName" dir="auto"></label><label><span data-i18n="department">Department</span><div class="department-select-row"><select name="departmentId" id="doctorDepartment" required></select><button class="quick-add-button" id="quickAddDepartment" type="button" data-i18n="quickAddDepartment">+ Add new department</button></div></label><label><span data-i18n="specialty">Specialty</span><input name="specialty" required></label><label><span data-i18n="title">Title</span><input name="title" required></label><label><span data-i18n="clinic">Clinic</span><input name="clinic" required></label><label><span data-i18n="fee">Consultation fee (EGP)</span><input name="fee" type="number" min="0" required></label><label class="check-label"><input name="active" type="checkbox" checked><span data-i18n="activeProfile">Profile active</span></label><div class="form-actions"><button class="primary-button" type="submit" data-i18n="saveDoctor">Add doctor</button><button class="text-button cancel-edit" type="button" data-form-reset="doctor" data-i18n="cancel">Cancel</button></div></form>
+          <div class="table-scroll"><table><thead><tr><th data-i18n="fullName">Full name</th><th data-i18n="department">Department</th><th data-i18n="specialty">Specialty</th><th data-i18n="clinic">Clinic</th><th data-i18n="fee">Fee</th><th data-i18n="status">Status</th><th data-i18n="actions">Actions</th></tr></thead><tbody id="doctorRows">
+            <tr data-id="doctor-1" data-name="Dr. Anya Sharma" data-ar-name="د. أنيا شارما" data-department-id="dept-1" data-department-name="Cardiology" data-specialty="Cardiology" data-title="Chief Cardiologist" data-clinic="Heart &amp; Vascular Clinic" data-fee="500" data-active="true"><td>Dr. Anya Sharma</td><td>Cardiology</td><td>Cardiology</td><td>Heart &amp; Vascular Clinic</td><td>500 EGP</td><td>Active</td><td></td></tr>
+            <tr data-id="doctor-2" data-name="Dr. Omar Farouk" data-ar-name="د. عمر فاروق" data-department-id="dept-2" data-department-name="Pediatrics" data-specialty="Pediatrics" data-title="Senior Pediatrician" data-clinic="Children’s Health Center" data-fee="400" data-active="true"><td>Dr. Omar Farouk</td><td>Pediatrics</td><td>Pediatrics</td><td>Children’s Health Center</td><td>400 EGP</td><td>Active</td><td></td></tr>
+            <tr data-id="doctor-3" data-name="Dr. Layla Hassan" data-ar-name="د. ليلى حسن" data-department-id="dept-3" data-department-name="Orthopedics" data-specialty="Orthopedics" data-title="Orthopedic Surgeon" data-clinic="Bone &amp; Joint Clinic" data-fee="450" data-active="true"><td>Dr. Layla Hassan</td><td>Orthopedics</td><td>Orthopedics</td><td>Bone &amp; Joint Clinic</td><td>450 EGP</td><td>Active</td><td></td></tr>
+          </tbody></table></div>
+        </div>
+        <div class="subsection nurse-directory" data-rbac="super staff"><h3 data-rbac-i18n="nurseDirectory">Nurse directory</h3>
+          <div class="table-scroll"><table><thead><tr><th data-i18n="fullName">Full name</th><th data-i18n="position">Position</th><th data-i18n="clinic">Clinic</th><th data-i18n="shift">Shift</th><th data-i18n="status">Status</th></tr></thead><tbody id="nurseRows"></tbody></table></div>
+        </div>
+        <div class="subsection" data-rbac="super"><h3 data-i18n="medicalResources">Medical resources</h3>
+          <form class="editor-form" id="resourceForm" data-form="resource"><input type="hidden" name="id"><label><span data-i18n="resourceName">Resource name</span><input name="name" required></label><label><span data-i18n="resourceArabic">Arabic name</span><input name="arName" dir="auto"></label><label><span data-i18n="category">Category</span><select name="category"><option value="tests">Tests & lab work</option><option value="scans">Imaging & scans</option><option value="surgery">Surgical procedures</option></select></label><label><span data-i18n="price">Price (EGP)</span><input name="price" type="number" min="0" required></label><label><span data-i18n="duration">Duration</span><input name="duration" required></label><label><span data-i18n="clinic">Connected clinic</span><input name="clinic" required></label><label class="wide-field"><span data-i18n="preparation">Preparation notes</span><input name="preparation" required></label><div class="form-actions"><button class="primary-button" type="submit" data-i18n="saveResource">Add resource</button><button class="text-button cancel-edit" type="button" data-form-reset="resource" data-i18n="cancel">Cancel</button></div></form>
+          <div class="table-scroll"><table><thead><tr><th data-i18n="resourceName">Resource name</th><th data-i18n="category">Category</th><th data-i18n="price">Price</th><th data-i18n="duration">Duration</th><th data-i18n="actions">Actions</th></tr></thead><tbody id="resourceRows">
+            <tr data-id="resource-1" data-name="Complete blood count" data-ar-name="صورة دم كاملة" data-category="tests" data-price="350" data-duration="15 min" data-clinic="Central Laboratory" data-preparation="No fasting required."><td>Complete blood count</td><td>Tests &amp; lab work</td><td>350 EGP</td><td>15 min</td><td></td></tr>
+            <tr data-id="resource-2" data-name="MRI scan" data-ar-name="تصوير بالرنين المغناطيسي" data-category="scans" data-price="3200" data-duration="30–60 min" data-clinic="Advanced Imaging" data-preparation="Remove metal items; fasting may apply."><td>MRI scan</td><td>Imaging &amp; scans</td><td>3,200 EGP</td><td>30–60 min</td><td></td></tr>
+            <tr data-id="resource-3" data-name="Laparoscopic surgery" data-ar-name="جراحة المناظير" data-category="surgery" data-price="38000" data-duration="1–3 hours" data-clinic="Surgical Center" data-preparation="Pre-operative assessment required."><td>Laparoscopic surgery</td><td>Surgical procedures</td><td>38,000 EGP</td><td>1–3 hours</td><td></td></tr>
+          </tbody></table></div>
+        </div>
+      </section>
+
+      <section class="admin-section management-section" id="doctor-requests" data-rbac="super staff">
+        <div class="section-heading"><div><span class="section-kicker" data-request-i18n="sectionKicker">STAFF ONBOARDING</span><h2 data-request-i18n="sectionTitle">Staff Registration Requests</h2><p data-request-i18n="sectionIntro">Review submitted staff credentials and approve or reject each request.</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th data-request-i18n="staffName">Staff Name</th><th data-request-i18n="role">Role</th><th data-request-i18n="specialty">Specialty / Department</th><th data-request-i18n="licenseId">License ID</th><th data-request-i18n="dateSubmitted">Date Submitted</th><th data-request-i18n="actions">Actions</th></tr></thead><tbody id="staffRequestRows">
+          <tr data-id="request-1" data-name="Dr. Farah Ibrahim" data-role="doctor" data-specialty="Cardiology" data-license="MED-EG-48291" data-submitted="2026-10-21" data-status="pending"><td>Dr. Farah Ibrahim</td><td>Doctor</td><td>Cardiology</td><td>MED-EG-48291</td><td>21 Oct 2026</td><td></td></tr>
+          <tr data-id="request-2" data-name="Dr. Tarek Mansour" data-role="doctor" data-specialty="Pediatrics" data-license="MED-EG-73614" data-submitted="2026-10-22" data-status="pending"><td>Dr. Tarek Mansour</td><td>Doctor</td><td>Pediatrics</td><td>MED-EG-73614</td><td>22 Oct 2026</td><td></td></tr>
+          <tr data-id="request-3" data-name="Dr. Leila Nassar" data-role="doctor" data-specialty="Neurology" data-license="MED-EG-90527" data-submitted="2026-10-23" data-status="pending"><td>Dr. Leila Nassar</td><td>Doctor</td><td>Neurology</td><td>MED-EG-90527</td><td>23 Oct 2026</td><td></td></tr>
+          <tr data-id="request-4" data-name="Nurse Applicant" data-role="nurse" data-specialty="Emergency Unit" data-license="NUR-EG-38120" data-submitted="2026-10-23" data-status="pending"><td>Nurse Applicant</td><td>Nurse</td><td>Emergency Unit</td><td>NUR-EG-38120</td><td>23 Oct 2026</td><td></td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section class="admin-section management-section" id="inventory" data-rbac="super">
+        <div class="section-heading"><div><span class="section-kicker" data-i18n="supplyKicker">SUPPLY & SAFETY</span><h2 data-i18n="inventoryTitle">Inventory monitoring</h2><p data-i18n="inventoryIntro">Stock changes update low-inventory alerts immediately.</p></div><span class="alert-count" id="inventoryAlertPill">0 alerts</span></div>
+        <form class="editor-form" id="inventoryForm" data-form="inventory"><input type="hidden" name="id"><label><span data-i18n="itemName">Item name</span><input name="name" required></label><label><span data-i18n="category">Category</span><select name="category"><option value="Medication">Medication</option><option value="Surgical supply">Surgical supply</option><option value="PPE">PPE</option><option value="Laboratory">Laboratory</option></select></label><label><span data-i18n="quantity">Quantity on hand</span><input name="quantity" type="number" min="0" required></label><label><span data-i18n="threshold">Low-stock threshold</span><input name="threshold" type="number" min="0" required></label><div class="form-actions"><button class="primary-button" type="submit" data-i18n="saveInventory">Add inventory item</button><button class="text-button cancel-edit" type="button" data-form-reset="inventory" data-i18n="cancel">Cancel</button></div></form>
+        <div id="inventoryAlertBanner" class="inventory-alert-banner" role="status" aria-live="polite" hidden></div>
+        <div class="inventory-grid"><div class="table-scroll"><table><thead><tr><th data-i18n="itemName">Item name</th><th data-i18n="category">Category</th><th data-i18n="quantity">On hand</th><th data-i18n="threshold">Alert at</th><th data-i18n="status">Status</th><th data-i18n="actions">Actions</th></tr></thead><tbody id="inventoryRows">
+          <tr data-id="stock-1" data-name="Sterile gloves (boxes)" data-category="PPE" data-quantity="42" data-threshold="20"><td>Sterile gloves (boxes)</td><td>PPE</td><td>42</td><td>20</td><td>In stock</td><td></td></tr>
+          <tr data-id="stock-2" data-name="Amoxicillin 500mg (packs)" data-category="Medication" data-quantity="14" data-threshold="18"><td>Amoxicillin 500mg (packs)</td><td>Medication</td><td>14</td><td>18</td><td>Low stock</td><td></td></tr>
+          <tr data-id="stock-3" data-name="Surgical sutures (units)" data-category="Surgical supply" data-quantity="28" data-threshold="12"><td>Surgical sutures (units)</td><td>Surgical supply</td><td>28</td><td>12</td><td>In stock</td><td></td></tr>
+          <tr data-id="stock-4" data-name="CBC reagent kits" data-category="Laboratory" data-quantity="8" data-threshold="10"><td>CBC reagent kits</td><td>Laboratory</td><td>8</td><td>10</td><td>Low stock</td><td></td></tr>
+        </tbody></table></div><aside class="alerts-panel"><div class="panel-heading"><div><span class="section-kicker" data-i18n="liveAlerts">LIVE MONITORING</span><h3 data-i18n="alertsTitle">Inventory alerts</h3></div></div><div id="alertsList" class="alerts-list"></div></aside></div>
+      </section>
+      <section class="admin-section management-section" id="patient-metrics" data-rbac="patient">
+        <div class="section-heading"><div><span class="section-kicker" data-rbac-i18n="patientMetrics">Patient Metrics</span><h2 data-rbac-i18n="patientMetrics">Patient Metrics</h2><p data-rbac-i18n="patientMetricsIntro">Patient-related activity summary.</p></div></div>
+        <div class="patient-metric-grid"><article class="patient-metric"><span data-rbac-i18n="totalPatients">Patient records</span><strong id="patientRecordCount">0</strong></article></div>
+      </section>
+      <section class="admin-section management-section" id="patient-records" data-rbac="patient">
+        <div class="section-heading"><div><span class="section-kicker" data-rbac-i18n="patientRecords">Patient Records</span><h2 data-rbac-i18n="patientRecords">Patient Records</h2><p data-rbac-i18n="patientRecordsIntro">Patient records available to this role.</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Patient</th><th>Age</th><th>Blood type</th><th>Allergies</th><th>Conditions</th><th>Medications</th><th>Last visit</th></tr></thead><tbody id="patientRecordsRows"></tbody></table></div>
+        <div class="subsection"><h3>Upcoming visits</h3><div class="table-scroll"><table><thead><tr><th>Patient</th><th>Date</th><th>Time</th><th>Assigned doctor</th><th>Reason</th></tr></thead><tbody id="patientVisitsRows"></tbody></table></div></div>
+        <div class="subsection"><h3>Assigned doctors</h3><div class="table-scroll"><table><thead><tr><th>Doctor</th><th>Specialty</th><th>Assigned patients</th><th>Next visit</th></tr></thead><tbody id="assignedDoctorsRows"></tbody></table></div></div>
+        <div class="subsection"><h3>Admission logs</h3><div class="table-scroll"><table><thead><tr><th>Patient</th><th>Admitted</th><th>Discharged</th><th>Department</th><th>Outcome</th></tr></thead><tbody id="admissionLogsRows"></tbody></table></div></div>
+      </section>
+    </main>
+  </div>
+  <dialog id="departmentCreateDialog" class="report-dialog quick-department-dialog"><form id="quickDepartmentForm"><button class="dialog-close" id="closeDepartmentDialog" type="button" aria-label="Close">×</button><span class="section-kicker" data-i18n="quickDepartmentKicker">NEW DEPARTMENT</span><h2 data-i18n="quickDepartmentTitle">Add a department</h2><label><span data-i18n="departmentName">Department name</span><input name="name" data-i18n-placeholder="departmentNamePlaceholder" required maxlength="60"></label><label><span data-i18n="arabicName">Arabic name</span><input name="arName" dir="auto" data-i18n-placeholder="arabicNamePlaceholder" maxlength="60"></label><div class="quick-dialog-actions"><button class="primary-button" type="submit" data-i18n="saveDepartment">Add department</button><button class="text-button" id="cancelDepartmentDialog" type="button" data-i18n="cancel">Cancel</button></div></form></dialog>
+  <div class="toast" id="adminToast" role="status"></div>
+  <script src="site-ui.js"></script>
+</body>
+</html>

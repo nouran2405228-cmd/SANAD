@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <script>(() => { const t = localStorage.getItem('sanad_theme') || 'light'; if(t === 'dark'){ document.documentElement.classList.add('dark'); document.documentElement.setAttribute('data-theme', 'dark'); } })();</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f4">
+  <title>Doctor Dashboard | Sanad Hospital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="doctor.css">
+  <link rel="stylesheet" href="chatbot.css">
+  <script src="translations.js"></script>
+  <script src="language.js"></script>
+  <script src="appointment-state.js"></script>
+  <script src="doctor.js" defer></script>
+</head>
+<body class="doctor-body">
+  <header class="doctor-topbar">
+    <a class="doctor-brand" id="homeBrandLink" href="index.html" aria-label="Sanad Hospital home">
+      <span class="brand-mark" aria-hidden="true">S<span>+</span></span>
+      <span>Sanad Hospital<small>DOCTOR WORKSPACE</small></span>
+    </a>
+    <div class="doctor-actions">
+      <span class="doctor-user" id="doctorGreeting">Doctor</span>
+      <button class="control-button" id="languageToggle" type="button" aria-label="Change language">العربية</button>
+      <button class="control-button theme-control" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg></button>
+      <a class="control-button home-control back-to-site" id="homeLink" href="index.html">Back to Site</a>
+      <button class="control-button logout-control" id="logoutButton" type="button">Log Out</button>
+    </div>
+  </header>
+
+  <div class="doctor-layout" id="doctorLayout" hidden>
+    <aside class="doctor-sidebar">
+      <a class="doctor-sidebar-brand" href="index.html" aria-label="Sanad Hospital home">
+        <span class="brand-mark" aria-hidden="true">S<span>+</span></span>
+        <span>Sanad Hospital<small data-i18n="doctorWorkspace">DOCTOR WORKSPACE</small></span>
+      </a>
+      <div class="doctor-sidebar-label" data-i18n="navCategory">CLINICAL CARE</div>
+      <nav id="doctorNav" aria-label="Doctor sections">
+        <a href="#appointments" class="active" data-section="appointments" data-i18n="navAppointments">Today's Appointments</a>
+        <a href="#patient-records" data-section="patient-records" data-i18n="navPatientRecords">Patient Records</a>
+        <a href="#prescription" data-section="prescription" data-i18n="navPrescription">Write Prescription</a>
+      </nav>
+      <div class="doctor-sidebar-foot"><span class="live-indicator"></span><span data-i18n="doctorWorkspace">DOCTOR WORKSPACE</span></div>
+    </aside>
+    <main class="doctor-main" id="doctorApp" hidden>
+    <section class="page-heading">
+      <div>
+        <span class="section-kicker" data-i18n="workspace">SANAD / CLINICAL WORKSPACE</span>
+        <h1 data-i18n="dashboardTitle">Doctor Dashboard</h1>
+        <p data-i18n="dashboardIntro">Today's schedule, patient records, and care notes.</p>
+      </div>
+      <time class="today-chip" id="todayLabel"></time>
+    </section>
+
+    <section class="patient-search-panel" aria-labelledby="patientSearchTitle">
+      <label class="search-label" id="patientSearchTitle" for="patientSearch" data-i18n="searchPatient">Find a patient</label>
+      <div class="search-row">
+        <input id="patientSearch" type="search" autocomplete="off" placeholder="Search by patient ID or name" aria-describedby="searchHint">
+        <button class="primary-button" id="searchPatientButton" type="button" data-i18n="search">Search</button>
+      </div>
+      <small id="searchHint" data-i18n="searchHint">Enter a patient name or ID to view their chart.</small>
+      <div id="patientSearchResults" class="patient-results" role="listbox" hidden></div>
+    </section>
+
+    <div class="clinical-grid">
+      <section class="panel appointments-panel" id="appointments" aria-labelledby="appointmentsTitle">
+        <div class="panel-heading">
+          <div><span class="section-kicker" data-i18n="today">TODAY</span><h2 id="appointmentsTitle" data-i18n="appointments">Today's appointments</h2></div>
+          <span class="count-pill" id="appointmentCount">0</span>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th data-i18n="time">Time</th><th data-i18n="patient">Patient</th><th data-i18n="patientId">Patient ID</th><th data-i18n="visitType">Visit type</th><th data-i18n="status">Status</th></tr></thead>
+            <tbody id="appointmentRows">
+              <tr class="appointment-row selected" data-patient-id="P-10482" data-time="08:30" data-type="consultation" data-status="completed">
+                <td>08:30</td><td>Mariam Hassan</td><td>P-10482</td><td data-i18n="consultation">Consultation</td>
+                <td><span class="appointment-status-badge" data-i18n="completed">Completed</span></td>
+              </tr>
+              <tr class="appointment-row" data-patient-id="P-10483" data-time="09:15" data-type="followUp" data-status="completed">
+                <td>09:15</td><td>Omar Nabil</td><td>P-10483</td><td data-i18n="followUp">Follow-up</td>
+                <td><span class="appointment-status-badge" data-i18n="completed">Completed</span></td>
+              </tr>
+              <tr class="appointment-row" data-patient-id="P-10484" data-time="10:00" data-type="labReview" data-status="postponed">
+                <td>10:00</td><td>Salma Mahmoud</td><td>P-10484</td><td data-i18n="labReview">Lab review</td>
+                <td><span class="appointment-status-badge" data-i18n="postponed">Postponed</span></td>
+              </tr>
+              <tr class="appointment-row" data-patient-id="P-10485" data-time="11:30" data-type="consultation" data-status="completed">
+                <td>11:30</td><td>Youssef Amin</td><td>P-10485</td><td data-i18n="consultation">Consultation</td>
+                <td><span class="appointment-status-badge" data-i18n="completed">Completed</span></td>
+              </tr>
+              <tr class="appointment-row" data-patient-id="P-10486" data-time="13:00" data-type="followUp" data-status="completed">
+                <td>13:00</td><td>Nour Adel</td><td>P-10486</td><td data-i18n="followUp">Follow-up</td>
+                <td><span class="appointment-status-badge" data-i18n="completed">Completed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel patient-panel" id="patient-records" aria-labelledby="patientTitle">
+        <div class="panel-heading">
+          <div><span class="section-kicker" data-i18n="patientFile">PATIENT FILE</span><h2 id="patientTitle" data-i18n="patientProfile">Patient profile</h2></div>
+        </div>
+        <div id="patientProfile" class="patient-profile" aria-live="polite"></div>
+      </section>
+
+      <section class="panel prescription-panel" id="prescription" aria-labelledby="prescriptionTitle">
+        <div class="panel-heading">
+          <div><span class="section-kicker" data-i18n="clinicalNote">CARE PLAN</span><h2 id="prescriptionTitle" data-i18n="writePrescription">Write prescription</h2></div>
+          <span class="active-patient" id="activePatientLabel"></span>
+        </div>
+        <form id="prescriptionForm" class="prescription-form">
+          <label><span data-i18n="medication">Medication name</span><input name="medication" required maxlength="100" placeholder="e.g. Amoxicillin"></label>
+          <label><span data-i18n="dosage">Dosage</span><input name="dosage" required maxlength="60" placeholder="e.g. 500 mg"></label>
+          <label><span data-i18n="frequency">Frequency</span><input name="frequency" required maxlength="80" placeholder="e.g. Twice daily"></label>
+          <label><span data-i18n="duration">Duration</span><input name="duration" required maxlength="60" placeholder="e.g. 7 days"></label>
+          <label class="notes-field"><span data-i18n="instructions">Instructions / notes</span><textarea name="instructions" rows="3" maxlength="500" placeholder="Diet, follow-up, or patient advice"></textarea></label>
+          <div class="prescription-actions"><button class="primary-button" type="submit" data-i18n="savePrescription">Save & issue prescription</button></div>
+        </form>
+        <div class="prescription-history">
+          <h3 data-i18n="recentPrescriptions">Recent prescriptions</h3>
+          <div id="prescriptionList" class="prescription-list"></div>
+        </div>
+      </section>
+    </div>
+    </main>
+  </div>
+
+  <div id="patientRecords" hidden>
+    <article class="patient-record" data-id="P-10482" data-name="Mariam Hassan" data-age="34" data-gender="Female" data-blood-type="A+" data-diagnosis="Migraine; seasonal asthma" data-allergies="Penicillin" data-notes="Headache frequency improved. Review sleep routine and hydration."><div class="patient-prescriptions"></div></article>
+    <article class="patient-record" data-id="P-10483" data-name="Omar Nabil" data-age="52" data-gender="Male" data-blood-type="O+" data-diagnosis="Hypertension; elevated LDL" data-allergies="None reported" data-notes="Blood pressure stable on current plan. Bring home readings to next visit."><div class="patient-prescriptions"></div></article>
+    <article class="patient-record" data-id="P-10484" data-name="Salma Mahmoud" data-age="19" data-gender="Female" data-blood-type="B+" data-diagnosis="Iron-deficiency anemia" data-allergies="Latex" data-notes="Reports improved energy. Repeat CBC and ferritin in four weeks."><div class="patient-prescriptions"></div></article>
+    <article class="patient-record" data-id="P-10485" data-name="Youssef Amin" data-age="8" data-gender="Male" data-blood-type="AB+" data-diagnosis="Allergic rhinitis" data-allergies="Dust mites" data-notes="Symptoms controlled. Continue avoidance plan during school term."><div class="patient-prescriptions"></div></article>
+    <article class="patient-record" data-id="P-10486" data-name="Nour Adel" data-age="67" data-gender="Female" data-blood-type="O-" data-diagnosis="Osteoarthritis; type 2 diabetes" data-allergies="Sulfa drugs" data-notes="Discussed low-impact exercise and routine glucose monitoring."><div class="patient-prescriptions"></div></article>
+  </div>
+  <main class="access-denied" id="accessDenied" hidden>
+    <span class="section-kicker">SANAD / ACCESS</span>
+    <h1 data-i18n="unauthorizedTitle">Doctor access required</h1>
+    <p data-i18n="unauthorizedText">Sign in with an authorized doctor account to open this workspace.</p>
+    <a class="primary-button" href="login.html" data-i18n="goLogin">Go to Log In</a>
+  </main>
+  <div class="toast" id="doctorToast" role="status" aria-live="polite"></div>
+  <script src="site-ui.js"></script>
+</body>
+</html>
