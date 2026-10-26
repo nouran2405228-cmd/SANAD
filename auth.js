@@ -1,3 +1,4 @@
+//auth
 const authText = TRANSLATIONS.auth;
 const params=new URLSearchParams(location.search);
 function readTheme(){return localStorage.getItem('sanad_theme') || 'light';}
