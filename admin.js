@@ -57,7 +57,7 @@
     window.__SANAD_ADMIN_STATE__ = { ...stateSeed, [storage.departments]: seed.departments };
   }
   
-  //function renderNurseDirectory
+  
   
   function renderNurseDirectory() {
     bodyRows('#nurseRows', records.staff.filter(member => /nurse/i.test(member.position)), member => dataRow(member, [
