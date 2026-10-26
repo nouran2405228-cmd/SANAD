@@ -1,6 +1,4 @@
 
-
-//doctor dashboard javascript
 (() => {
   const params = new URLSearchParams(location.search);
   let lang = document.documentElement.lang === 'ar' ? 'ar' : 'en';
