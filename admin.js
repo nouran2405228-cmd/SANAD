@@ -56,6 +56,9 @@
   if (!window.__SANAD_ADMIN_STATE__) {
     window.__SANAD_ADMIN_STATE__ = { ...stateSeed, [storage.departments]: seed.departments };
   }
+  
+  //function renderNurseDirectory
+  
   function renderNurseDirectory() {
     bodyRows('#nurseRows', records.staff.filter(member => /nurse/i.test(member.position)), member => dataRow(member, [
       tableCell(member.name, 'cell-title'), tableCell(member.position), tableCell(member.clinic),
