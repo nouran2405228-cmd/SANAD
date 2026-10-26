@@ -1,3 +1,4 @@
+//[patient dashboard javascript]
 (() => {
   const params = new URLSearchParams(location.search);
   let lang = localStorage.getItem('sanad_lang') || (document.documentElement.lang === 'ar' ? 'ar' : 'en');
